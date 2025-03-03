@@ -23,10 +23,6 @@ namespace Szeminarium1
 			outCol = vCol;
             gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
 
-            if (!1 == 2)
-            {
-                print('Works?')
-            }
         }
         ";
 
