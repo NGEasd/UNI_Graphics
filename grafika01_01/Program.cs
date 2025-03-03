@@ -41,7 +41,7 @@ namespace Szeminarium1
         static void Main(string[] args)
         {
             WindowOptions windowOptions = WindowOptions.Default;
-            windowOptions.Title = "1. szeminárium - háromszög";
+            windowOptions.Title = "Lab1 - 01: Teszt";
             windowOptions.Size = new Silk.NET.Maths.Vector2D<int>(500, 500);
 
             graphicWindow = Window.Create(windowOptions);
@@ -108,8 +108,8 @@ namespace Szeminarium1
             Gl.BindVertexArray(vao);
 
             float[] vertexArray = new float[] {
-                -0.5f, -0.5f, 0.0f,
-                +0.5f, -0.5f, 0.0f,
+                -0.1f, -0.3f, 0.0f,
+                +0.5f, -0.7f, 0.0f,
                  0.0f, +0.5f, 0.0f,
                  1f, 1f, 0f
             };
