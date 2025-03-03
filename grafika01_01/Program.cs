@@ -22,6 +22,11 @@ namespace Szeminarium1
         {
 			outCol = vCol;
             gl_Position = vec4(vPos.x, vPos.y, vPos.z, 1.0);
+
+            if (!1 == 2)
+            {
+                print('Works?')
+            }
         }
         ";
 
@@ -77,7 +82,7 @@ namespace Szeminarium1
             program = Gl.CreateProgram();
             Gl.AttachShader(program, vshader);
             Gl.AttachShader(program, fshader);
-            // Gl.LinkProgram(program);
+            Gl.LinkProgram(program);
             Gl.DetachShader(program, vshader);
             Gl.DetachShader(program, fshader);
             Gl.DeleteShader(vshader);
