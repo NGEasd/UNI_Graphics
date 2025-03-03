@@ -127,21 +127,19 @@ namespace Szeminarium1
             };
 
             uint vertices = Gl.GenBuffer();
-            // Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
+            Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
             Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)vertexArray.AsSpan(), GLEnum.StaticDraw);
             Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, null);
             Gl.EnableVertexAttribArray(0);
-
-            // error checking
-            GLEnum error = Gl.GetError();
-            Console.WriteLine($"OpenGL Error: {error}");
 
 
             uint colors = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, colors);
             Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)colorArray.AsSpan(), GLEnum.StaticDraw);
             Gl.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, null);
-            Gl.EnableVertexAttribArray(1);
+            
+            // duplicate enable => colors arent enabled!
+            Gl.EnableVertexAttribArray(0);
 
             uint indices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, indices);
@@ -152,6 +150,10 @@ namespace Szeminarium1
             Gl.DrawElements(GLEnum.Triangles, (uint)indexArray.Length, GLEnum.UnsignedInt, null); // we used element buffer
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, 0);
             Gl.BindVertexArray(vao);
+
+            // error checking
+            GLEnum error = Gl.GetError();
+            Console.WriteLine($"OpenGL Error: {error}");
 
             // always unbound the vertex buffer first, so no halfway results are displayed by accident
             Gl.DeleteBuffer(vertices);
