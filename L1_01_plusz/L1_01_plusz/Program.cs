@@ -109,36 +109,42 @@ namespace Szeminarium1
             Gl.BindVertexArray(vao);
 
             float[] vertexArray = new float[] {
-                // create triangles
+
+                
+                // "atskalazzuk" -> konnyebb szamitas
+
+                // elso oldal
                 // H1
-                -0.2f, 0.0f, 0.0f,
-                0.2f, 0.0f, 0.0f,
-                0.2f, 0.4f, 0.0f,  
+                -0.3f, 0.0f, 0.0f,
+                0.3f, 0.0f, 0.0f,
+                0.3f, 0.6f, 0.0f,  
         
                 // H2
-                -0.2f, 0.0f, 0.0f,
-                0.2f, 0.4f, 0.0f,
-                -0.2f, 0.4f, 0.0f, 
+                -0.3f, 0.0f, 0.0f,
+                0.3f, 0.6f, 0.0f,
+                -0.3f, 0.6f, 0.0f, 
 
+                // masodik oldal
                 // H3
-                0.2f, 0.0f, 0.0f,
-                0.4f, 0.1f, 0.0f,
-                0.4f, 0.5f, 0.0f,  
+                0.3f, 0.0f, 0.0f,
+                0.6f, 0.3f, 0.0f,
+                0.6f, 0.9f, 0.0f,  
         
                 // H4
-                0.2f, 0.0f, 0.0f,
-                0.4f, 0.5f, 0.0f,
-                0.2f, 0.4f, 0.0f,  
+                0.3f, 0.0f, 0.0f,
+                0.6f, 0.9f, 0.0f,
+                0.3f, 0.6f, 0.0f,  
 
+                // harmadik oldal
                 // H5
-                -0.2f, 0.4f, 0.0f,
-                0.0f, 0.5f, 0.0f,
-                0.4f, 0.5f, 0.0f,  
+                -0.3f, 0.6f, 0.0f,
+                0.0f, 0.9f, 0.0f,
+                0.3f, 0.6f, 0.0f,  
         
                 // H6
-                -0.2f, 0.4f, 0.0f,
-                0.4f, 0.5f, 0.0f,
-                0.2f, 0.4f, 0.0f
+                0.3f, 0.6f, 0.0f,
+                0.6f, 0.9f, 0.0f,
+                0.0f, 0.9f, 0.0f
 
 
             };
