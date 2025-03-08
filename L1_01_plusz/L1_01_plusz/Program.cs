@@ -109,7 +109,7 @@ namespace Szeminarium1
             uint linesVao = Gl.GenVertexArray();
             Gl.BindVertexArray(cubeVao);
 
-            float[] vertexArray = new float[] {
+            float[] vertexArray = [
 
                 
                 // "atskalazzuk" -> konnyebb szamitas
@@ -146,9 +146,9 @@ namespace Szeminarium1
                 0.3f, 0.6f, 0.0f,
                 0.6f, 0.9f, 0.0f,
                 0.0f, 0.9f, 0.0f
-            };
+            ];
 
-            float[] colorArray = new float[] {
+            float[] colorArray = [
 
                 // H1
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -180,60 +180,74 @@ namespace Szeminarium1
                 0.0f, 0.0f, 1.0f, 1.0f,
                 0.0f, 0.0f, 1.0f, 1.0f,
 
-            };
+            ];
 
-            uint[] indexArray = new uint[] {
+            uint[] indexArray = [
                 0, 1, 2,
                 3, 4, 5,
                 6, 7, 8,
                 9, 10, 11,
                 12, 13, 14,
                 15, 16, 17
-            };
+            ];
 
 
             // vonalak
-            float[] lineVertexArray = new float[]
+            float[] lineVertexArray = new float[48];
+            uint[] lineIndexArray = new uint[24];
+            float[] blackColorArray =
             {
-                // 1. oldal, 1 vonal
-                -0.11f, 0.0f, 0.0f,
-                -0.11f, 0.6f, 0.0f,
-                -0.09f, 0.6f, 0.0f,
-                -0.09f, 0.0f, 0.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
 
-                // 2. vonal
-                0.11f, 0.0f, 0.0f,
-                0.11f, 0.6f, 0.0f,
-                0.09f, 0.6f, 0.0f,
-                0.09f, 0.0f, 0.0f
-                
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
 
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
             };
 
-            float[] lineColorArray = new float[]
-            {
-                // szeparator -> a teglalap pontjai feketek
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
 
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
-                0.0f, 0.0f, 0.0f, 1.0f,
+            // elso oldal
+            uint lineIndex = 0;
+            uint triangleIndex = 0;
 
-            };
+            // "kirajzolas"
 
-            uint[] lineIndexes = new uint[]
-            {
-                0, 1, 2,
-                0, 3, 2,
-                4, 5, 6,
-                4, 7, 6
-            };
+            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.2f, 0.6f], ref lineVertexArray);
+            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.4f, 0.6f], ref lineVertexArray);
 
-            
+            writeVerticalPoints(ref lineIndex, [-0.1f, 0.0f, 0.6f], ref lineVertexArray);
+            writeVerticalPoints(ref lineIndex, [0.1f, 0.0f, 0.6f], ref lineVertexArray);
+
+            markTriangle(ref triangleIndex, 0, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 4, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 8, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 12, ref lineIndexArray);
+
             uint vertices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
             Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)vertexArray.AsSpan(), GLEnum.StaticDraw);
@@ -252,10 +266,10 @@ namespace Szeminarium1
             Gl.BindBuffer(GLEnum.ArrayBuffer, 0);
             Gl.UseProgram(program);
 
-            Gl.DrawElements(GLEnum.Triangles, (uint)indexArray.Length, GLEnum.UnsignedInt, null); // we used element buffer
+            Gl.DrawElements(GLEnum.Triangles, (uint)indexArray.Length, GLEnum.UnsignedInt, null);
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, 0);
             Gl.BindVertexArray(cubeVao);
-           
+
             // lines
             uint lines = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, lines);
@@ -265,21 +279,20 @@ namespace Szeminarium1
 
             uint lineColors = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, lineColors);
-            Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)lineColorArray.AsSpan(), GLEnum.StaticDraw);
+            Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)blackColorArray.AsSpan(), GLEnum.StaticDraw);
             Gl.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, null);
             Gl.EnableVertexAttribArray(1);
 
             uint lineIndices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, lineIndices);
-            Gl.BufferData(GLEnum.ElementArrayBuffer, (ReadOnlySpan<uint>)lineIndexes.AsSpan(), GLEnum.StaticDraw);
+            Gl.BufferData(GLEnum.ElementArrayBuffer, (ReadOnlySpan<uint>)lineIndexArray.AsSpan(), GLEnum.StaticDraw);
             Gl.BindBuffer(GLEnum.ArrayBuffer, 0);
             Gl.UseProgram(program);
 
-            Gl.DrawElements(GLEnum.Triangles, (uint)lineIndexes.Length, GLEnum.UnsignedInt, null); // we used element buffer
+            Gl.DrawElements(GLEnum.Triangles, (uint)lineIndexArray.Length, GLEnum.UnsignedInt, null);
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, 0);
             Gl.BindVertexArray(linesVao);
 
-            // always unbound the vertex buffer first, so no halfway results are displayed by accident
             Gl.DeleteBuffer(vertices);
             Gl.DeleteBuffer(colors);
             Gl.DeleteBuffer(indices);
@@ -291,5 +304,60 @@ namespace Szeminarium1
             Gl.DeleteVertexArray(cubeVao);
             Gl.DeleteVertexArray(linesVao);
         }
+
+        private static void writeHorizontalPoints(ref uint index, float[] coordinates, ref float[] location)
+        {
+            // coordinates
+            // [st_x, st_y, dist]
+            location[index++] = coordinates[0];
+            location[index++] = coordinates[1] - 0.01f;
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0];
+            location[index++] = coordinates[1] + 0.01f;
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0] + coordinates[2];
+            location[index++] = coordinates[1] - 0.01f;
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0] + coordinates[2];
+            location[index++] = coordinates[1] + 0.01f;
+            location[index++] = 0.0f;
+        }
+
+        private static void writeVerticalPoints(ref uint index, float[] coordinates, ref float[] location)
+        {
+            // coordinates
+            // [st_x, st_y, dist]
+            location[index++] = coordinates[0] - 0.01f;
+            location[index++] = coordinates[1];
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0] - 0.01f;
+            location[index++] = coordinates[1] + coordinates[2];
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0] + 0.01f;
+            location[index++] = coordinates[1] + coordinates[2];
+            location[index++] = 0.0f;
+
+            location[index++] = coordinates[0] + 0.01f;
+            location[index++] = coordinates[1];
+            location[index++] = 0.0f;
+        }
+
+        private static void markTriangle(ref uint i, uint vertex, ref uint[] indexes)
+        {
+            indexes[i++] = vertex;
+            indexes[i++] = vertex + 1;
+            indexes[i++] = vertex + 2;
+
+            indexes[i++] = vertex;
+            indexes[i++] = vertex + 3;
+            indexes[i++] = vertex + 2;
+        }
     }
+
+    
 }
