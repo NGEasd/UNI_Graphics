@@ -105,8 +105,9 @@ namespace Szeminarium1
 
             Gl.Clear(ClearBufferMask.ColorBufferBit);
 
-            uint vao = Gl.GenVertexArray();
-            Gl.BindVertexArray(vao);
+            uint cubeVao = Gl.GenVertexArray();
+            uint linesVao = Gl.GenVertexArray();
+            Gl.BindVertexArray(cubeVao);
 
             float[] vertexArray = new float[] {
 
@@ -145,8 +146,6 @@ namespace Szeminarium1
                 0.3f, 0.6f, 0.0f,
                 0.6f, 0.9f, 0.0f,
                 0.0f, 0.9f, 0.0f
-
-
             };
 
             float[] colorArray = new float[] {
@@ -179,7 +178,8 @@ namespace Szeminarium1
                 // H6
                 0.0f, 0.0f, 1.0f, 1.0f,
                 0.0f, 0.0f, 1.0f, 1.0f,
-                0.0f, 0.0f, 1.0f, 1.0f
+                0.0f, 0.0f, 1.0f, 1.0f,
+
             };
 
             uint[] indexArray = new uint[] {
@@ -191,12 +191,54 @@ namespace Szeminarium1
                 15, 16, 17
             };
 
+
+            // vonalak
+            float[] lineVertexArray = new float[]
+            {
+                // 1. oldal, 1 vonal
+                -0.11f, 0.0f, 0.0f,
+                -0.11f, 0.6f, 0.0f,
+                -0.09f, 0.6f, 0.0f,
+                -0.09f, 0.0f, 0.0f,
+
+                // 2. vonal
+                0.11f, 0.0f, 0.0f,
+                0.11f, 0.6f, 0.0f,
+                0.09f, 0.6f, 0.0f,
+                0.09f, 0.0f, 0.0f
+                
+
+            };
+
+            float[] lineColorArray = new float[]
+            {
+                // szeparator -> a teglalap pontjai feketek
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f,
+
+            };
+
+            uint[] lineIndexes = new uint[]
+            {
+                0, 1, 2,
+                0, 3, 2,
+                4, 5, 6,
+                4, 7, 6
+            };
+
+            
             uint vertices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
             Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)vertexArray.AsSpan(), GLEnum.StaticDraw);
             Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, null);
             Gl.EnableVertexAttribArray(0);
-
 
             uint colors = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, colors);
@@ -212,13 +254,42 @@ namespace Szeminarium1
 
             Gl.DrawElements(GLEnum.Triangles, (uint)indexArray.Length, GLEnum.UnsignedInt, null); // we used element buffer
             Gl.BindBuffer(GLEnum.ElementArrayBuffer, 0);
-            Gl.BindVertexArray(vao);
+            Gl.BindVertexArray(cubeVao);
+           
+            // lines
+            uint lines = Gl.GenBuffer();
+            Gl.BindBuffer(GLEnum.ArrayBuffer, lines);
+            Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)lineVertexArray.AsSpan(), GLEnum.StaticDraw);
+            Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, null);
+            Gl.EnableVertexAttribArray(0);
+
+            uint lineColors = Gl.GenBuffer();
+            Gl.BindBuffer(GLEnum.ArrayBuffer, lineColors);
+            Gl.BufferData(GLEnum.ArrayBuffer, (ReadOnlySpan<float>)lineColorArray.AsSpan(), GLEnum.StaticDraw);
+            Gl.VertexAttribPointer(1, 4, VertexAttribPointerType.Float, false, 0, null);
+            Gl.EnableVertexAttribArray(1);
+
+            uint lineIndices = Gl.GenBuffer();
+            Gl.BindBuffer(GLEnum.ElementArrayBuffer, lineIndices);
+            Gl.BufferData(GLEnum.ElementArrayBuffer, (ReadOnlySpan<uint>)lineIndexes.AsSpan(), GLEnum.StaticDraw);
+            Gl.BindBuffer(GLEnum.ArrayBuffer, 0);
+            Gl.UseProgram(program);
+
+            Gl.DrawElements(GLEnum.Triangles, (uint)lineIndexes.Length, GLEnum.UnsignedInt, null); // we used element buffer
+            Gl.BindBuffer(GLEnum.ElementArrayBuffer, 0);
+            Gl.BindVertexArray(linesVao);
 
             // always unbound the vertex buffer first, so no halfway results are displayed by accident
             Gl.DeleteBuffer(vertices);
             Gl.DeleteBuffer(colors);
             Gl.DeleteBuffer(indices);
-            Gl.DeleteVertexArray(vao);
+
+            Gl.DeleteBuffer(lines);
+            Gl.DeleteBuffer(lineColors);
+            Gl.DeleteBuffer(lineIndices);
+
+            Gl.DeleteVertexArray(cubeVao);
+            Gl.DeleteVertexArray(linesVao);
         }
     }
 }
