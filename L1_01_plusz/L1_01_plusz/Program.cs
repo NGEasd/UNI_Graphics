@@ -193,22 +193,16 @@ namespace Szeminarium1
 
 
             // vonalak
-            float[] lineVertexArray = new float[48];
-            uint[] lineIndexArray = new uint[24];
+            float[] lineVertexArray = new float[1444];
+            uint[] lineIndexArray = new uint[72];
             float[] blackColorArray =
             {
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
-
-                 0.0f, 0.0f, 0.0f, 1.0f,
-                 0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
 
                  0.0f, 0.0f, 0.0f, 1.0f,
-                 0.0f, 0.0f, 0.0f, 1.0f,
-                 0.0f, 0.0f, 0.0f, 1.0f,
-
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
@@ -216,37 +210,96 @@ namespace Szeminarium1
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
-
-                 0.0f, 0.0f, 0.0f, 1.0f,
-                 0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
 
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
 
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
                  0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f,
+                 0.0f, 0.0f, 0.0f, 1.0f
+
             };
 
 
-            // elso oldal
             uint lineIndex = 0;
             uint triangleIndex = 0;
 
             // "kirajzolas"
+            // 1. oldal
+            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.2f, 0.6f], ref lineVertexArray, 0.0f);
+            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.4f, 0.6f], ref lineVertexArray, 0.0f);
 
-            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.2f, 0.6f], ref lineVertexArray);
-            writeHorizontalPoints(ref lineIndex, [-0.3f, 0.4f, 0.6f], ref lineVertexArray);
-
-            writeVerticalPoints(ref lineIndex, [-0.1f, 0.0f, 0.6f], ref lineVertexArray);
-            writeVerticalPoints(ref lineIndex, [0.1f, 0.0f, 0.6f], ref lineVertexArray);
+            writeVerticalPoints(ref lineIndex, [-0.1f, 0.0f, 0.6f], ref lineVertexArray, 0.0f);
+            writeVerticalPoints(ref lineIndex, [0.1f, 0.0f, 0.6f], ref lineVertexArray, 0.0f);
 
             markTriangle(ref triangleIndex, 0, ref lineIndexArray);
             markTriangle(ref triangleIndex, 4, ref lineIndexArray);
             markTriangle(ref triangleIndex, 8, ref lineIndexArray);
             markTriangle(ref triangleIndex, 12, ref lineIndexArray);
+
+            // 2. oldal
+            writeHorizontalPoints(ref lineIndex, [0.3f, 0.2f, 0.3f], ref lineVertexArray, 0.3f);
+            writeHorizontalPoints(ref lineIndex, [0.3f, 0.4f, 0.3f], ref lineVertexArray, 0.3f);
+
+            writeVerticalPoints(ref lineIndex, [0.4f, 0.1f, 0.6f], ref lineVertexArray, 0.0f);
+            writeVerticalPoints(ref lineIndex, [0.5f, 0.2f, 0.6f], ref lineVertexArray, 0.0f);
+
+            markTriangle(ref triangleIndex, 16, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 20, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 24, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 28, ref lineIndexArray);
+
+            // 3. oldal
+            writeHorizontalPoints(ref lineIndex, [-0.2f, 0.7f, 0.6f], ref lineVertexArray, 0.0f);
+            writeHorizontalPoints(ref lineIndex, [-0.1f, 0.8f, 0.6f], ref lineVertexArray, 0.0f);
+
+            writeVerticalPoints(ref lineIndex, [-0.1f, 0.6f, 0.3f], ref lineVertexArray, 0.3f);
+            writeVerticalPoints(ref lineIndex, [0.1f, 0.6f, 0.3f], ref lineVertexArray, 0.3f);
+
+            markTriangle(ref triangleIndex, 32, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 36, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 40, ref lineIndexArray);
+            markTriangle(ref triangleIndex, 44, ref lineIndexArray);
+
 
             uint vertices = Gl.GenBuffer();
             Gl.BindBuffer(GLEnum.ArrayBuffer, vertices);
@@ -305,7 +358,7 @@ namespace Szeminarium1
             Gl.DeleteVertexArray(linesVao);
         }
 
-        private static void writeHorizontalPoints(ref uint index, float[] coordinates, ref float[] location)
+        private static void writeHorizontalPoints(ref uint index, float[] coordinates, ref float[] location, float offset)
         {
             // coordinates
             // [st_x, st_y, dist]
@@ -318,15 +371,15 @@ namespace Szeminarium1
             location[index++] = 0.0f;
 
             location[index++] = coordinates[0] + coordinates[2];
-            location[index++] = coordinates[1] - 0.01f;
+            location[index++] = coordinates[1] + offset +0.01f;
             location[index++] = 0.0f;
 
             location[index++] = coordinates[0] + coordinates[2];
-            location[index++] = coordinates[1] + 0.01f;
+            location[index++] = coordinates[1] + offset - 0.01f;
             location[index++] = 0.0f;
         }
 
-        private static void writeVerticalPoints(ref uint index, float[] coordinates, ref float[] location)
+        private static void writeVerticalPoints(ref uint index, float[] coordinates, ref float[] location, float offset)
         {
             // coordinates
             // [st_x, st_y, dist]
@@ -334,11 +387,11 @@ namespace Szeminarium1
             location[index++] = coordinates[1];
             location[index++] = 0.0f;
 
-            location[index++] = coordinates[0] - 0.01f;
+            location[index++] = coordinates[0] + offset - 0.01f;
             location[index++] = coordinates[1] + coordinates[2];
             location[index++] = 0.0f;
 
-            location[index++] = coordinates[0] + 0.01f;
+            location[index++] = coordinates[0] + offset + 0.01f;
             location[index++] = coordinates[1] + coordinates[2];
             location[index++] = 0.0f;
 
@@ -358,6 +411,5 @@ namespace Szeminarium1
             indexes[i++] = vertex + 2;
         }
     }
-
     
 }
