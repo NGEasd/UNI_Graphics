@@ -2,10 +2,6 @@
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
-using System;
-using System.Diagnostics.Metrics;
-using System.Numerics;
-using System.Reflection.Metadata.Ecma335;
 using Szeminarium;
 
 namespace GrafikaSzeminarium
@@ -21,7 +17,8 @@ namespace GrafikaSzeminarium
 
         private static CameraDescriptor camera = new CameraDescriptor();
 
-        private static CubeArrangementModel cubeArrangementModel;
+        private static CubeArrangementModel cubeArrangementModel = new CubeArrangementModel();
+        private static bool initialize = false;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string ViewMatrixVariableName = "uView";
@@ -100,7 +97,7 @@ namespace GrafikaSzeminarium
             }
 
             Gl.ClearColor(System.Drawing.Color.White);
-            
+
             Gl.Enable(EnableCap.CullFace);
             Gl.CullFace(TriangleFace.Back);
 
@@ -168,106 +165,95 @@ namespace GrafikaSzeminarium
                     camera.DecreaseZXAngle();
                     break;
 
-                // forgatasi logika
+            }
 
-                // fuggoleges
-                // R -> jobb oldal elore
-                case Key.Q:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("R-VERTICAL", 1);
-                    break;
+            // forgatasi logika
+            if (!cubeArrangementModel.Animating)
+            {
+                switch (key)
+                {
+                    
+                    // fuggoleges
+                    // R -> jobb oldal elore
+                    case Key.Q:
+                        cubeArrangementModel.enableAnimation("R-VERTICAL", 1);
+                        break;
 
-                // T -> jobb oldal hatra
-                case Key.W:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("R-VERTICAL", 0);
-                    break;
+                    // T -> jobb oldal hatra
+                    case Key.W:
+                        cubeArrangementModel.enableAnimation("R-VERTICAL", 0);
+                        break;
 
-                // E -> kozep elore
-                case Key.E:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("M-VERTICAL", 1);
-                    break;
+                    // E -> kozep elore
+                    case Key.E:
+                        cubeArrangementModel.enableAnimation("M-VERTICAL", 1);
+                        break;
 
-                // R -> kozep hatra
-                case Key.R:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("M-VERTICAL", 0);
-                    break;
+                    // R -> kozep hatra
+                    case Key.R:
+                        cubeArrangementModel.enableAnimation("M-VERTICAL", 0);
+                        break;
 
-                // T -> bal elore
-                case Key.T:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("L-VERTICAL", 1);
-                    break;
+                    // T -> bal elore
+                    case Key.T:
+                        cubeArrangementModel.enableAnimation("L-VERTICAL", 1);
+                        break;
 
-                // Y -> bal hatra
-                case Key.Y:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("L-VERTICAL", 0);
-                    break;
+                    // Y -> bal hatra
+                    case Key.Y:
+                        cubeArrangementModel.enableAnimation("L-VERTICAL", 0);
+                        break;
 
-                // vizszintes
-                case Key.F:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("T-HORIZONTAL", 1);
-                    break;
+                    // vizszintes
+                    case Key.F:
+                        cubeArrangementModel.enableAnimation("T-HORIZONTAL", 1);
+                        break;
 
-                case Key.G:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("T-HORIZONTAL", 0);
-                    break;
+                    case Key.G:
+                        cubeArrangementModel.enableAnimation("T-HORIZONTAL", 0);
+                        break;
 
-                case Key.H:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("M-HORIZONTAL", 1);
-                    break;
+                    case Key.H:
+                        cubeArrangementModel.enableAnimation("M-HORIZONTAL", 1);
+                        break;
 
-                case Key.J:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("M-HORIZONTAL", 0);
-                    break;
+                    case Key.J:
+                        cubeArrangementModel.enableAnimation("M-HORIZONTAL", 0);
+                        break;
 
-                case Key.K:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("B-HORIZONTAL", 1);
-                    break;
+                    case Key.K:
+                        cubeArrangementModel.enableAnimation("B-HORIZONTAL", 1);
+                        break;
 
-                case Key.L:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("B-HORIZONTAL", 0);
-                    break;
+                    case Key.L:
+                        cubeArrangementModel.enableAnimation("B-HORIZONTAL", 0);
+                        break;
 
-                // elulso oldalak
-                case Key.Z:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("FRONT", 1);
-                    break;
+                    // elulso oldalak
+                    case Key.Z:
+                        cubeArrangementModel.enableAnimation("FRONT", 1);
+                        break;
 
-                case Key.X:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("FRONT", 0);
-                    break;
+                    case Key.X:
+                        cubeArrangementModel.enableAnimation("FRONT", 0);
+                        break;
 
-                case Key.C:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("MIDDLE", 1);
-                    break;
+                    case Key.C:
+                        cubeArrangementModel.enableAnimation("MIDDLE", 1);
+                        break;
 
-                case Key.V:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("MIDDLE", 0);
-                    break;
+                    case Key.V:
+                        cubeArrangementModel.enableAnimation("MIDDLE", 0);
+                        break;
 
-                case Key.B:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("BACK", 1);
-                    break;
+                    case Key.B:
+                        cubeArrangementModel.enableAnimation("BACK", 1);
+                        break;
 
-                case Key.N:
-                    rubikCube.rotating = true;
-                    rotateRubikCube("BACK", 0);
-                    break;
+                    case Key.N:
+                        cubeArrangementModel.enableAnimation("BACK", 0);
+                        break;
+                }
             }
         }
 
@@ -275,7 +261,7 @@ namespace GrafikaSzeminarium
         {
             // NO OpenGL
             // make it threadsafe
-            // cubeArrangementModel.AdvanceTime(deltaTime);
+            cubeArrangementModel.AdvanceTime(deltaTime, ref rubikCube);
         }
 
         private static unsafe void GraphicWindow_Render(double deltaTime)
@@ -292,7 +278,6 @@ namespace GrafikaSzeminarium
             var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)(Math.PI / 2), 1024f / 768f, 0.1f, 100f);
             SetMatrix(projectionMatrix, ProjectionMatrixVariableName);
 
-            // rubik kocka
             for (int i = 0; i < rubikCube.Cubes.Count; i++)
             {
                 var cube = rubikCube.Cubes[i];
@@ -329,96 +314,6 @@ namespace GrafikaSzeminarium
             var error = (ErrorCode)Gl.GetError();
             if (error != ErrorCode.NoError)
                 throw new Exception("GL.GetError() returned " + error.ToString());
-        }
-
-        private static void rotateRubikCube(String type, uint direction)
-        {
-            float target = direction == 1 ? (float)Math.PI / 2f : (float)Math.PI / 2f * -1f;
-            int priorityIdx = 0;
-            int priorityPos = 0;
-            char axis = 'Y';
-
-            switch (type)
-            {
-                // X tengely korul: fuggoleges
-                case "R-VERTICAL": priorityIdx = 0; priorityPos = 1; axis = 'X'; break;
-                case "M-VERTICAL": priorityIdx = 0; priorityPos = 0; axis = 'X'; break;
-                case "L-VERTICAL": priorityIdx = 0; priorityPos = -1; axis = 'X'; break;
-
-                // Y tengely korul: vizszintes
-                case "T-HORIZONTAL": priorityIdx = 1; priorityPos = 1; axis = 'Y'; break;
-                case "M-HORIZONTAL": priorityIdx = 1; priorityPos = 0; axis = 'Y'; break;
-                case "B-HORIZONTAL": priorityIdx = 1; priorityPos = -1; axis = 'Y'; break;
-
-                // Z tengely korul: elulso
-                case "FRONT": priorityIdx = 2; priorityPos = 1; axis = 'Z'; break;
-                case "MIDDLE": priorityIdx = 2; priorityPos = 0; axis = 'Z'; break;
-                case "BACK": priorityIdx = 2; priorityPos = -1; axis = 'Z'; break;
-
-                default:
-                    return;
-            }
-
-            // forgatasi matrix felepitese
-            Matrix4X4<float> rotation = axis switch
-            {
-                'X' => Matrix4X4.CreateRotationX(target),
-                'Y' => Matrix4X4.CreateRotationY(target),
-                'Z' => Matrix4X4.CreateRotationZ(target)
-            };
-
-            // transzformalunk + beallitjuk az uj poziciot
-           var oldLogicalPositions = rubikCube.LogicalPositions.Select(pos => (float[])pos.Clone()).ToList();
-
-            for (int i = 0; i < rubikCube.Cubes.Count; i++)
-            {
-                var logicalPosition = oldLogicalPositions[i];
-
-                if (logicalPosition[priorityIdx] == priorityPos)
-                {
-                    // forgatunk es poziciot valtunk
-                    rubikCube.Transformations[i] = rubikCube.Transformations[i] * rotation;
-                    rubikCube.LogicalPositions[i] = ChangeLogicalPosition(logicalPosition, axis, direction);
-                }
-            }
-
-            for (int i = 0; i < rubikCube.Cubes.Count; i++)
-            {
-                Console.Write(oldLogicalPositions[i][0] + " " + oldLogicalPositions[i][1] + " " + oldLogicalPositions[i][2] + " =>> ");
-                Console.WriteLine(rubikCube.LogicalPositions[i][0] + " " + rubikCube.LogicalPositions[i][1] + " " + rubikCube.LogicalPositions[i][2]);
-            }
-            Console.WriteLine("\n________---------_______---------________\n");
-
-
-
-        }
-
-        private static float[] ChangeLogicalPosition(float[] position, char axis, uint direction)
-        {
-            float x = position[0], y = position[1], z = position[2];
-            float newX = x, newY = y, newZ = z;
-            float sign = direction == 1 ? 1f : -1f;
-
-            switch (axis)
-            {
-                case 'X': // X tengely 
-                    newY = -sign * z;
-                    newZ = sign * y;
-                    break;
-
-                case 'Y': // Y tengely
-                    newX = sign * z;
-                    newZ = -sign * x;
-                    break;
-
-                case 'Z': // Z tengely 
-                    newX = -sign * y;
-                    newY = sign * x;
-                    break;
-            }
-
-            float[] res = {newX, newY, newZ};
-            return res;
         }
     }
 
