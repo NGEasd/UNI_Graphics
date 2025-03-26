@@ -1,9 +1,6 @@
 ﻿using GrafikaSzeminarium;
 using Silk.NET.Maths;
 using Silk.NET.OpenGL;
-using System.Collections;
-using System.Numerics;
-using Szeminarium;
 
 internal class RubikCubeArrangementModel
 {
@@ -12,10 +9,12 @@ internal class RubikCubeArrangementModel
     
     // minden kockat eltolunk a poziciojaban de az origoban modellezunk
     public List<Matrix4X4<float>> Transformations { get;  set; }
+    public List<Matrix4X4<float>> OriginalTransformations { get; set; }
 
     // minden kockanak lesz egy logikai pozicioja
     // ennek segitsegevel ki lehet szurni a forgatni kivant oldalt
     public List<float[]> LogicalPositions { get; set; }
+    public List<float[]> OriginalLogicalPositions { get; set; }
 
     private GL Gl;
 
@@ -39,7 +38,9 @@ internal class RubikCubeArrangementModel
         rotating = false;
         Cubes = new List<ModelObjectDescriptor>();
         Transformations = new List<Matrix4X4<float>>();
+        OriginalTransformations = new List<Matrix4X4<float>>();
         LogicalPositions = new List<float[]>();
+        OriginalLogicalPositions = new List<float[]>();
 
         for (int x = -1; x <= 1; x++)
         {
@@ -53,10 +54,12 @@ internal class RubikCubeArrangementModel
                     // eltolas meghatarozasa + 0.1 terkoz
                     var translation = Matrix4X4.CreateTranslation(x * 1.1f, y * 1.1f, z * 1.1f);
                     Transformations.Add((Matrix4X4<float>)translation);
+                    OriginalTransformations.Add((Matrix4X4<float>)translation);
 
                     // logikai poziciok
                     float[] pos = { x, y, z };
                     LogicalPositions.Add(pos);
+                    OriginalLogicalPositions.Add(pos.ToArray());
 
                     var cube = ModelObjectDescriptor.CreateCube(Gl, colorList);
                     Cubes.Add(cube);
@@ -100,6 +103,24 @@ internal class RubikCubeArrangementModel
             colors.AddRange(x == 1 ? CubeColors[5] : CubeColors[6]);
 
         return colors.ToArray();
+    }
+
+    public bool isSolved()
+    {
+        if (LogicalPositions.Count != OriginalLogicalPositions.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < LogicalPositions.Count; i++)
+        {
+            if (!LogicalPositions[i].SequenceEqual(OriginalLogicalPositions[i]))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void Dispose()

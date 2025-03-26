@@ -1,4 +1,6 @@
 ﻿using Silk.NET.Maths;
+using Silk.NET.OpenGL;
+using Silk.NET.Vulkan;
 
 namespace Szeminarium
 {
@@ -7,6 +9,7 @@ namespace Szeminarium
 
         public bool Animating { get; set; } = false;
         
+        // rotation sizes
         public static float CurrentRotationAngle = 0.0f;
         public const float TargetRotationAngle = (float)Math.PI / 2f;
         public static float ActualRotationAngle = 0.0f;
@@ -15,7 +18,7 @@ namespace Szeminarium
         public float RotationSpeed = (float)Math.PI / 2f;
         public float RandomRotationSpeed = (float)Math.PI * 2;
 
-        // Rotation angle and direction
+        // rotation angle and direction
         public static String RotationType { get; set; }
         public static int RotationDirection;
 
@@ -46,45 +49,80 @@ namespace Szeminarium
         };
 
 
-        public double DiamondCubeLocalAngle { get; private set; } = 0;
-        public double DiamondCubeGlobalYAngle { get; private set; } = 0;
+        // pulze settings
+        public bool Pulzing { get; set; } = false;
+        public static float scaleFactor = 1.0f;
+        public double time = 0;
+        public int pulzeCounter = 0;
 
         internal void AdvanceTime(double deltaTime, ref RubikCubeArrangementModel rubikCube)
         {
-            if (!Animating)
-                return;
-
+            // ha pul
+            if (Pulzing)
             {
-                float speed = Random ? RandomRotationSpeed : RotationSpeed;
-                ActualRotationAngle = speed * (float)deltaTime;
-
-                // egy forgatason tul
-                if (CurrentRotationAngle + ActualRotationAngle >= TargetRotationAngle)
+                if (pulzeCounter < 370)
                 {
-               
-                    Console.WriteLine("ROTATED! STOP");
-                    ActualRotationAngle = TargetRotationAngle - CurrentRotationAngle;
-                    CurrentRotationAngle = 0;
-                    rotateRubikCube(ref rubikCube, true);
-                    Animating = false;
+                    //Console.WriteLine("Pulze counter: " + pulzeCounter);
+                    time += deltaTime * 3;
+                    scaleFactor = 1.0f + (float)Math.Sin(time) * 0.009f;
 
-                    // random case
-                    if (Random)
-                    {
-                        randomCounter++;
-                        RandomizeCube();
-                        Console.WriteLine("Random round: " + randomCounter);
-                        if (randomCounter == 30) Random = false;
-                        else Animating = true;
-                    }
-
+                    pulzeCounter++;
+                    scaleCube(ref rubikCube);
                 }
                 else
                 {
-                    CurrentRotationAngle += ActualRotationAngle;
-                    rotateRubikCube(ref rubikCube, false);
+                    for (int i = 0; i < rubikCube.Cubes.Count; i++)
+                    {
+                        rubikCube.Transformations[i] = rubikCube.OriginalTransformations[i];
+                    }
+                    Pulzing = false;
+                    pulzeCounter = 0;
                 }
+
+                return;
             }
+
+            if (!Animating)
+            {   
+                return;
+            }
+
+            
+            float speed = Random ? RandomRotationSpeed : RotationSpeed;
+            ActualRotationAngle = speed * (float)deltaTime;
+
+            // egy forgatason tul
+            if (CurrentRotationAngle + ActualRotationAngle >= TargetRotationAngle)
+            {
+               
+                Console.WriteLine("ROTATED! STOP");
+                ActualRotationAngle = TargetRotationAngle - CurrentRotationAngle;
+                CurrentRotationAngle = 0;
+                rotateRubikCube(ref rubikCube, true);
+                Animating = false;
+
+                // random case
+                if (Random)
+                {
+                    randomCounter++;
+                    RandomizeCube();
+                    Console.WriteLine("Random round: " + randomCounter);
+                    if (randomCounter == 30) Random = false;
+                    else Animating = true;
+                }
+
+                if (rubikCube.isSolved())
+                {
+                    Pulzing = true;
+                }
+
+            }
+            else
+            {
+                CurrentRotationAngle += ActualRotationAngle;
+                rotateRubikCube(ref rubikCube, false);
+            }
+            
 
         }
 
@@ -200,6 +238,15 @@ namespace Szeminarium
 
             float[] res = { newX, newY, newZ };
             return res;
+        }
+
+        private static void scaleCube(ref RubikCubeArrangementModel rubikCube)
+        {
+            Matrix4X4<float> scaleMatrix = Matrix4X4.CreateScale(scaleFactor, scaleFactor, scaleFactor);
+            for (int i = 0; i < rubikCube.Cubes.Count; i++)
+            {
+                rubikCube.Transformations[i] = rubikCube.Transformations[i] * scaleMatrix;
+            }
         }
     }
 }
