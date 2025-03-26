@@ -18,7 +18,7 @@ namespace GrafikaSzeminarium
         private static CameraDescriptor camera = new CameraDescriptor();
 
         private static CubeArrangementModel cubeArrangementModel = new CubeArrangementModel();
-        private static bool initialize = false;
+        private static bool random = false;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string ViewMatrixVariableName = "uView";
@@ -168,7 +168,7 @@ namespace GrafikaSzeminarium
             }
 
             // forgatasi logika
-            if (!cubeArrangementModel.Animating)
+            if (!cubeArrangementModel.Animating && !random)
             {
                 switch (key)
                 {
@@ -252,6 +252,11 @@ namespace GrafikaSzeminarium
 
                     case Key.N:
                         cubeArrangementModel.enableAnimation("BACK", 0);
+                        break;
+
+                    case Key.P:
+                        cubeArrangementModel.setRandom(true);
+                        Console.WriteLine("Randomized!!");
                         break;
                 }
             }

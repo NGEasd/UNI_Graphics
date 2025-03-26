@@ -1,9 +1,4 @@
 ﻿using Silk.NET.Maths;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Szeminarium
 {
@@ -11,15 +6,44 @@ namespace Szeminarium
     {
 
         public bool Animating { get; set; } = false;
-        public bool Rotating { get; set; } = false;
+        
         public static float CurrentRotationAngle = 0.0f;
         public const float TargetRotationAngle = (float)Math.PI / 2f;
         public static float ActualRotationAngle = 0.0f;
-        public const float RotationSpeed = (float)Math.PI / 2f;
+
+        // rotation speed
+        public float RotationSpeed = (float)Math.PI / 2f;
+        public float RandomRotationSpeed = (float)Math.PI * 2;
 
         // Rotation angle and direction
         public static String RotationType { get; set; }
-        public static uint RotationDirection;
+        public static int RotationDirection;
+
+        // Animation types to randomize
+        private Random randomGenerator = new Random();
+        public int randomCounter = 0;
+        public bool Random { get; set; } = false;
+        public static readonly string[] Animations = 
+        {
+            "R-VERTICAL",
+            "R-VERTICAL",
+            "M-VERTICAL",
+            "M-VERTICAL",
+            "L-VERTICAL",
+            "L-VERTICAL",
+            "T-HORIZONTAL",
+            "T-HORIZONTAL",
+            "M-HORIZONTAL",
+            "M-HORIZONTAL",
+            "B-HORIZONTAL",
+            "B-HORIZONTAL",
+            "FRONT",
+            "FRONT",
+            "MIDDLE",
+            "MIDDLE",
+            "BACK",
+            "BACK"
+        };
 
 
         public double DiamondCubeLocalAngle { get; private set; } = 0;
@@ -31,31 +55,64 @@ namespace Szeminarium
                 return;
 
             {
-                ActualRotationAngle = RotationSpeed * (float)deltaTime;
+                float speed = Random ? RandomRotationSpeed : RotationSpeed;
+                ActualRotationAngle = speed * (float)deltaTime;
+
+                // egy forgatason tul
                 if (CurrentRotationAngle + ActualRotationAngle >= TargetRotationAngle)
                 {
+               
                     Console.WriteLine("ROTATED! STOP");
                     ActualRotationAngle = TargetRotationAngle - CurrentRotationAngle;
                     CurrentRotationAngle = 0;
                     rotateRubikCube(ref rubikCube, true);
                     Animating = false;
-                    Rotating = false;
+
+                    // random case
+                    if (Random)
+                    {
+                        randomCounter++;
+                        RandomizeCube();
+                        Console.WriteLine("Random round: " + randomCounter);
+                        if (randomCounter == 30) Random = false;
+                        else Animating = true;
+                    }
+
                 }
                 else
                 {
                     CurrentRotationAngle += ActualRotationAngle;
                     rotateRubikCube(ref rubikCube, false);
-                    Console.WriteLine("ROTATING");
                 }
             }
-            
+
         }
 
-        public void enableAnimation(String type, uint direction)
+        public void setRandom(bool rand) { 
+            Random = rand;
+            randomCounter = 0;
+            Animating = true;
+            RandomizeCube();
+
+        }
+
+        public void RandomizeCube()
+        {
+            int randIdx = randomGenerator.Next(Animations.Length);
+            RotationDirection = randIdx % 2 == 0 ? 1 : 0;
+            RotationType = Animations[randIdx];
+        }
+
+        public void enableAnimation(String type, int direction)
         {
             Animating = true;
             RotationType = type;
             RotationDirection = direction;
+        }
+
+        public void setRandomizedCube(bool value)
+        {
+            Random = value;
         }
 
         private static void rotateRubikCube(ref RubikCubeArrangementModel rubikCube, bool changePosition)
@@ -117,7 +174,7 @@ namespace Szeminarium
             }
         }
 
-        private static float[] ChangeLogicalPosition(float[] position, char axis, uint direction)
+        private static float[] ChangeLogicalPosition(float[] position, char axis, int direction)
         {
             float x = position[0], y = position[1], z = position[2];
             float newX = x, newY = y, newZ = z;
