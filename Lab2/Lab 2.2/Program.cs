@@ -1,5 +1,6 @@
 ﻿using Silk.NET.Input;
 using Silk.NET.Maths;
+using Silk.NET.OpenAL;
 using Silk.NET.OpenGL;
 using Silk.NET.Windowing;
 using Szeminarium;
@@ -18,7 +19,10 @@ namespace GrafikaSzeminarium
         private static CameraDescriptor camera = new CameraDescriptor();
 
         private static CubeArrangementModel cubeArrangementModel = new CubeArrangementModel();
-        private static bool random = false;
+
+        // mouse
+        private static float mouseX;
+        private static float mouseY;
 
         private const string ModelMatrixVariableName = "uModel";
         private const string ViewMatrixVariableName = "uView";
@@ -145,114 +149,63 @@ namespace GrafikaSzeminarium
         {
             switch (key)
             {
-                // kamera logika
-                case Key.Left:
-                    camera.DecreaseZYAngle();
+                case Key.W: 
+                    camera.MoveForward();
                     break;
-                case Key.Right:
-                    camera.IncreaseZYAngle();
+                case Key.S:
+                    camera.MoveBackward();
                     break;
-                case Key.Down:
-                    camera.IncreaseDistance();
-                    break;
-                case Key.Up:
-                    camera.DecreaseDistance();
-                    break;
-                case Key.U:
-                    camera.IncreaseZXAngle();
+                case Key.A:
+                    camera.MoveLeft();
                     break;
                 case Key.D:
-                    camera.DecreaseZXAngle();
+                    camera.MoveRight();
+                    break;
+                case Key.Space:
+                    camera.MoveUp();
+                    break;
+                case Key.ShiftLeft: 
+                    camera.MoveDown();
                     break;
 
+                case Key.Left:
+                    camera.Rotate(-5, 0);  
+                    break;
+                case Key.Right:
+                    camera.Rotate(5, 0);
+                    break;
+                case Key.Up:
+                    camera.Rotate(0, 5);  
+                    break;
+                case Key.Down:
+                    camera.Rotate(0, -5);
+                    break;
             }
 
-            // forgatasi logika
-            if (!cubeArrangementModel.Animating && !random)
+            if (!cubeArrangementModel.Animating && !cubeArrangementModel.Random)
             {
                 switch (key)
                 {
-                    
-                    // fuggoleges
-                    // R -> jobb oldal elore
-                    case Key.Q:
-                        cubeArrangementModel.enableAnimation("R-VERTICAL", 1);
-                        break;
+                    case Key.E: cubeArrangementModel.enableAnimation("R-VERTICAL", 1); break;
+                    case Key.R: cubeArrangementModel.enableAnimation("R-VERTICAL", 0); break;
+                    case Key.T: cubeArrangementModel.enableAnimation("M-VERTICAL", 1); break;
+                    case Key.Y: cubeArrangementModel.enableAnimation("M-VERTICAL", 0); break;
+                    case Key.U: cubeArrangementModel.enableAnimation("L-VERTICAL", 1); break;
+                    case Key.I: cubeArrangementModel.enableAnimation("L-VERTICAL", 0); break;
 
-                    // T -> jobb oldal hatra
-                    case Key.W:
-                        cubeArrangementModel.enableAnimation("R-VERTICAL", 0);
-                        break;
+                    case Key.F: cubeArrangementModel.enableAnimation("T-HORIZONTAL", 1); break;
+                    case Key.G: cubeArrangementModel.enableAnimation("T-HORIZONTAL", 0); break;
+                    case Key.H: cubeArrangementModel.enableAnimation("M-HORIZONTAL", 1); break;
+                    case Key.J: cubeArrangementModel.enableAnimation("M-HORIZONTAL", 0); break;
+                    case Key.K: cubeArrangementModel.enableAnimation("B-HORIZONTAL", 1); break;
+                    case Key.L: cubeArrangementModel.enableAnimation("B-HORIZONTAL", 0); break;
 
-                    // E -> kozep elore
-                    case Key.E:
-                        cubeArrangementModel.enableAnimation("M-VERTICAL", 1);
-                        break;
-
-                    // R -> kozep hatra
-                    case Key.R:
-                        cubeArrangementModel.enableAnimation("M-VERTICAL", 0);
-                        break;
-
-                    // T -> bal elore
-                    case Key.T:
-                        cubeArrangementModel.enableAnimation("L-VERTICAL", 1);
-                        break;
-
-                    // Y -> bal hatra
-                    case Key.Y:
-                        cubeArrangementModel.enableAnimation("L-VERTICAL", 0);
-                        break;
-
-                    // vizszintes
-                    case Key.F:
-                        cubeArrangementModel.enableAnimation("T-HORIZONTAL", 1);
-                        break;
-
-                    case Key.G:
-                        cubeArrangementModel.enableAnimation("T-HORIZONTAL", 0);
-                        break;
-
-                    case Key.H:
-                        cubeArrangementModel.enableAnimation("M-HORIZONTAL", 1);
-                        break;
-
-                    case Key.J:
-                        cubeArrangementModel.enableAnimation("M-HORIZONTAL", 0);
-                        break;
-
-                    case Key.K:
-                        cubeArrangementModel.enableAnimation("B-HORIZONTAL", 1);
-                        break;
-
-                    case Key.L:
-                        cubeArrangementModel.enableAnimation("B-HORIZONTAL", 0);
-                        break;
-
-                    // elulso oldalak
-                    case Key.Z:
-                        cubeArrangementModel.enableAnimation("FRONT", 1);
-                        break;
-
-                    case Key.X:
-                        cubeArrangementModel.enableAnimation("FRONT", 0);
-                        break;
-
-                    case Key.C:
-                        cubeArrangementModel.enableAnimation("MIDDLE", 1);
-                        break;
-
-                    case Key.V:
-                        cubeArrangementModel.enableAnimation("MIDDLE", 0);
-                        break;
-
-                    case Key.B:
-                        cubeArrangementModel.enableAnimation("BACK", 1);
-                        break;
-
-                    case Key.N:
-                        cubeArrangementModel.enableAnimation("BACK", 0);
-                        break;
+                    case Key.Z: cubeArrangementModel.enableAnimation("FRONT", 1); break;
+                    case Key.X: cubeArrangementModel.enableAnimation("FRONT", 0); break;
+                    case Key.C: cubeArrangementModel.enableAnimation("MIDDLE", 1); break;
+                    case Key.V: cubeArrangementModel.enableAnimation("MIDDLE", 0); break;
+                    case Key.B: cubeArrangementModel.enableAnimation("BACK", 1); break;
+                    case Key.N: cubeArrangementModel.enableAnimation("BACK", 0); break;
 
                     case Key.P:
                         cubeArrangementModel.setRandom(true);
@@ -262,10 +215,13 @@ namespace GrafikaSzeminarium
             }
         }
 
+
         private static void GraphicWindow_Update(double deltaTime)
         {
             // NO OpenGL
             // make it threadsafe
+            Console.WriteLine($"Jelenlegi egér pozíció: ({mouseX}, {mouseY})");
+
             cubeArrangementModel.AdvanceTime(deltaTime, ref rubikCube);
         }
 
@@ -276,13 +232,24 @@ namespace GrafikaSzeminarium
 
             Gl.UseProgram(program);
 
-            // kamera
-            var viewMatrix = Matrix4X4.CreateLookAt(camera.Position, camera.Target, camera.UpVector);
+            // Look at matrix felepitese: (pozicio, fokusz, upvektor)
+            var viewMatrix = Matrix4X4.CreateLookAt(
+                camera.Position,
+                camera.Position + camera.ForwardVector,
+                camera.UpVector
+            );
             SetMatrix(viewMatrix, ViewMatrixVariableName);
 
-            var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)(Math.PI / 2), 1024f / 768f, 0.1f, 100f);
+            // Perspektíva beállítása
+            var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>(
+                (float)(Math.PI / 2),
+                1024f / 768f,          
+                0.1f,                   
+                100f                   
+            );
             SetMatrix(projectionMatrix, ProjectionMatrixVariableName);
 
+            // kirajzolas
             for (int i = 0; i < rubikCube.Cubes.Count; i++)
             {
                 var cube = rubikCube.Cubes[i];
