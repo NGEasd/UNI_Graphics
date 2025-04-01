@@ -1,15 +1,14 @@
-﻿
-using Silk.NET.Maths;
+﻿using Silk.NET.Maths;
 
 namespace Szeminarium
 {
     internal class CameraDescriptor
     {
-        public double DistanceToOrigin { get; private set; } = 1;
+        public double DistanceToOrigin { get; private set; } = 5; // Növeljük a távolságot
 
-        public double AngleToZYPlane { get; private set; } = 0;
+        public double AngleToZYPlane { get; private set; } = Math.PI / 4; // Kamera szög beállítása
 
-        public double AngleToZXPlane { get; private set; } = 0;
+        public double AngleToZXPlane { get; private set; } = 0; // Kamera szög beállítása
 
         const double DistanceScaleFactor = 1.1;
 
