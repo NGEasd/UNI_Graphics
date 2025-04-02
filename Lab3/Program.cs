@@ -19,6 +19,7 @@ namespace GrafikaSzeminarium
         private static ImGuiController imGuiController;
 
         private static DezsaModelDescriptor dezsa;
+        private static Dezsa2Descriptor dezsa2;
 
         private static CameraDescriptor camera = new CameraDescriptor();
 
@@ -65,6 +66,7 @@ namespace GrafikaSzeminarium
         {
             Gl = graphicWindow.CreateOpenGL();
             dezsa = new DezsaModelDescriptor(Gl);
+            dezsa2 = new Dezsa2Descriptor(Gl);
 
             var inputContext = graphicWindow.CreateInput();
             foreach (var keyboard in inputContext.Keyboards)
@@ -144,26 +146,36 @@ namespace GrafikaSzeminarium
         {
             switch (key)
             {
-                case Key.Left:
-                    camera.DecreaseZYAngle();
+                case Key.W:
+                    camera.MoveForward();
                     break;
-                case Key.Right:
-                    camera.IncreaseZYAngle();
+                case Key.S:
+                    camera.MoveBackward();
                     break;
-                case Key.Down:
-                    camera.IncreaseDistance();
-                    break;
-                case Key.Up:
-                    camera.DecreaseDistance();
-                    break;
-                case Key.U:
-                    camera.IncreaseZXAngle();
+                case Key.A:
+                    camera.MoveLeft();
                     break;
                 case Key.D:
-                    camera.DecreaseZXAngle();
+                    camera.MoveRight();
                     break;
                 case Key.Space:
-                    cubeArrangementModel.AnimationEnabled = !cubeArrangementModel.AnimationEnabled;
+                    camera.MoveUp();
+                    break;
+                case Key.ShiftLeft:
+                    camera.MoveDown();
+                    break;
+
+                case Key.Left:
+                    camera.Rotate(-5, 0);
+                    break;
+                case Key.Right:
+                    camera.Rotate(5, 0);
+                    break;
+                case Key.Up:
+                    camera.Rotate(0, 5);
+                    break;
+                case Key.Down:
+                    camera.Rotate(0, -5);
                     break;
             }
         }
@@ -185,11 +197,11 @@ namespace GrafikaSzeminarium
             Gl.UseProgram(program);
 
             SetUniform3(LightColorVariableName, new Vector3(1f, 1f, 1f));
-            SetUniform3(LightPositionVariableName, new Vector3(0f, 1.2f, 0f));
+            SetUniform3(LightPositionVariableName, new Vector3(camera.Position.X, camera.Position.Y, camera.Position.Z));
             SetUniform3(ViewPositionVariableName, new Vector3(camera.Position.X, camera.Position.Y, camera.Position.Z));
             SetUniform1(ShinenessVariableName, shininess);
 
-            var viewMatrix = Matrix4X4.CreateLookAt(camera.Position, camera.Target, camera.UpVector);
+            var viewMatrix = Matrix4X4.CreateLookAt(camera.Position, camera.Position + camera.ForwardVector, camera.UpVector);
             SetMatrix(viewMatrix, ViewMatrixVariableName);
 
             var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)(Math.PI / 2), 1024f / 768f, 0.1f, 100f);
@@ -199,6 +211,18 @@ namespace GrafikaSzeminarium
             {
                 var fence = dezsa.Fences[i];
                 var transform = dezsa.Transformations[i];
+
+                SetModelMatrix(transform);
+                DrawModelObject(fence);
+            }
+
+            for (int i = 0; i < dezsa2.Fences.Count; i++)
+            {
+                var fence = dezsa2.Fences[i];
+
+                // eltoljuk melle
+                var translation = Matrix4X4.CreateTranslation(3.0f, 0, 0);
+                var transform = dezsa2.Transformations[i] * translation;
 
                 SetModelMatrix(transform);
                 DrawModelObject(fence);
