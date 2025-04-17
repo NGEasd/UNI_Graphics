@@ -20,10 +20,6 @@ namespace GrafikaSzeminarium
 
         private static CubeArrangementModel cubeArrangementModel = new CubeArrangementModel();
 
-        // mouse
-        private static float mouseX;
-        private static float mouseY;
-
         private const string ModelMatrixVariableName = "uModel";
         private const string ViewMatrixVariableName = "uView";
         private const string ProjectionMatrixVariableName = "uProjection";
@@ -64,7 +60,7 @@ namespace GrafikaSzeminarium
         static void Main(string[] args)
         {
             WindowOptions windowOptions = WindowOptions.Default;
-            windowOptions.Title = "Labor 2_01";
+            windowOptions.Title = "Labor 2 (+)";
             windowOptions.Size = new Silk.NET.Maths.Vector2D<int>(500, 500);
 
             graphicWindow = Window.Create(windowOptions);
@@ -220,8 +216,6 @@ namespace GrafikaSzeminarium
         {
             // NO OpenGL
             // make it threadsafe
-            Console.WriteLine($"Jelenlegi egér pozíció: ({mouseX}, {mouseY})");
-
             cubeArrangementModel.AdvanceTime(deltaTime, ref rubikCube);
         }
 
@@ -242,9 +236,16 @@ namespace GrafikaSzeminarium
 
             // Perspektíva beállítása
             var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>(
+                // FOV - 9 fokos
                 (float)(Math.PI / 2),
-                1024f / 768f,          
-                0.1f,                   
+
+                // aspect ratio (felbontas)
+                1024f / 768f,  
+                
+                // legkozelebbi tav, amit meg lerendelelunk
+                0.1f,
+                
+                // legtavolabbi pont, amit meg lerenderelunk
                 100f                   
             );
             SetMatrix(projectionMatrix, ProjectionMatrixVariableName);

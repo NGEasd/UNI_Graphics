@@ -23,7 +23,10 @@ namespace GrafikaSzeminarium
             Fences = new List<ModelObjectDescriptor>();
             Transformations = new List<Matrix4X4<float>>();
 
+            // 20 fokos forgatas 
             float rotationAngle = (float)Math.PI / 9;
+
+            // sugar kiszamolasa 10 fokos szogben, derekszogu haromszoggel
             float distanceR = fenceWidth / (2 * (float)Math.Tan(Math.PI/18));
 
             for (int i = 0; i < 18; i++)

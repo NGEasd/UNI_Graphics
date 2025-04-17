@@ -91,7 +91,7 @@ namespace Szeminarium
             float speed = Random ? RandomRotationSpeed : RotationSpeed;
             ActualRotationAngle = speed * (float)deltaTime;
 
-            // egy forgatason tul
+            // egy forgatason tul, vagyis leallas
             if (CurrentRotationAngle + ActualRotationAngle >= TargetRotationAngle)
             {
                

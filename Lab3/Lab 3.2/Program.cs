@@ -35,16 +35,19 @@ namespace GrafikaSzeminarium
         private const string LightPositionVariableName = "uLightPos";
         private const string ViewPositionVariableName = "uViewPos";
 
+        // shaderben allithato valtozok helye
         private const string ShinenessVariableName = "uShininess";
         private const string AmbientVariableName = "uAmbientStrength";
         private const string DiffuseVariableName = "uDiffuseStrength";
         private const string SpecularVariableName = "uSpecularStrength";
 
+        // vektorkomponenskent megadott attributumok, amive allitjuk
         private static float shininess = 50;
         private static Vector3 ambientStrength = new Vector3(0.1f, 0.1f, 0.1f);
         private static Vector3 diffuseStrength = new Vector3(0.3f, 0.3f, 0.3f);
         private static Vector3 specularStrength = new Vector3(0.6f, 0.6f, 0.6f);
 
+        // szin index, amivel az oldalat allitjuk
         private static int selectedColorIndex = 0;
 
         private static uint program;
@@ -52,7 +55,7 @@ namespace GrafikaSzeminarium
         static void Main(string[] args)
         {
             WindowOptions windowOptions = WindowOptions.Default;
-            windowOptions.Title = "Grafika szeminárium";
+            windowOptions.Title = "Lab 3.2";
             windowOptions.Size = new Silk.NET.Maths.Vector2D<int>(500, 500);
 
             graphicWindow = Window.Create(windowOptions);
@@ -87,8 +90,6 @@ namespace GrafikaSzeminarium
                 // Adjust the viewport to the new window size
                 Gl.Viewport(s);
             };
-
-
 
             imGuiController = new ImGuiController(Gl, graphicWindow, inputContext);
 
@@ -211,7 +212,6 @@ namespace GrafikaSzeminarium
             var projectionMatrix = Matrix4X4.CreatePerspectiveFieldOfView<float>((float)(Math.PI / 2), 1024f / 768f, 0.1f, 100f);
             SetMatrix(projectionMatrix, ProjectionMatrixVariableName);
 
-
             var modelMatrixCenterCube = Matrix4X4.CreateScale((float)cubeArrangementModel.CenterCubeScale);
             SetModelMatrix(modelMatrixCenterCube);
             DrawModelObject(cube);
@@ -235,6 +235,9 @@ namespace GrafikaSzeminarium
             ImGui.SliderFloat3("Ambient Strength", ref ambientStrength, 0.0f, 1.0f);
             ImGui.SliderFloat3("Diffuse Strength", ref diffuseStrength, 0.0f, 1.0f);
             ImGui.SliderFloat3("Specular Strength", ref specularStrength, 0.0f, 1.0f);
+
+            // oldal szinvaltoztatasa -> egy adott oldalra be vannak hardcodeolva szinek
+            // az aktualis kockat megszuntetjuk, es az adott szint beallitva uj kockat hozunk letre
             if (ImGuiNET.ImGui.ListBox("Cube Color", ref selectedColorIndex, colors, colors.Length))
             {
                 cube.Dispose();

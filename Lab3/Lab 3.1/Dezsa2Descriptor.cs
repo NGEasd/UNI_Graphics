@@ -21,26 +21,24 @@ namespace GrafikaSzeminarium
         public Dezsa2Descriptor(GL gl)
         {
             this.gl = gl;
+
+            // normal vektorok, 10 fokos hajlitasokkal
             float[] vertexArray = new float[] {
-                // Bal alsó csúcs (-0.2, -0.5)
                 -0.2f, -0.5f, 0f,
                 (float)(-Math.Sin(Math.PI/18)),
                 (float)(-Math.Sin(Math.PI/18)),
                 (float)(Math.Cos(Math.PI/18)),
     
-                // Jobb alsó csúcs (0.2, -0.5)
                 0.2f, -0.5f, 0f,
                 (float)(Math.Sin(Math.PI/18)),
                 (float)(-Math.Sin(Math.PI/18)),
                 (float)(Math.Cos(Math.PI/18)),
     
-                // Jobb felső csúcs (0.2, 0.5)
                 0.2f, 0.5f, 0f,
                 (float)(Math.Sin(Math.PI/18)),
                 (float)(Math.Sin(Math.PI/18)),
                 (float)(Math.Cos(Math.PI/18)),
     
-                // Bal felső csúcs (-0.2, 0.5)
                 -0.2f, 0.5f, 0f,
                 (float)(-Math.Sin(Math.PI/18)),
                 (float)(Math.Sin(Math.PI/18)),

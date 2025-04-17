@@ -21,6 +21,7 @@ namespace GrafikaSzeminarium
 
         private GL Gl;
 
+        // alap szin
         private static float[] colorArray = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -53,6 +54,8 @@ namespace GrafikaSzeminarium
                 1.0f, 1.0f, 0.0f, 1.0f,
             };
 
+
+        // tobbi szin, egy oldal hardcode-olva
         private static readonly float[] green = new float[] {
                 1.0f, 0.0f, 0.0f, 1.0f,
                 1.0f, 0.0f, 0.0f, 1.0f,
@@ -342,6 +345,8 @@ namespace GrafikaSzeminarium
             return new ModelObjectDescriptor() {Vao= vao, Vertices = vertices, Colors = colors, Indices = indices, IndexArrayLength = (uint)indexArray.Length, Gl = Gl};
 
         }
+
+        // szinezo konstruktor
         public ModelObjectDescriptor CreateColoredCube(GL gl, string colorType)
         {
             setColorArray(colorType);
@@ -395,7 +400,7 @@ namespace GrafikaSzeminarium
                     Array.Copy(purple, colorArray, purple.Length);
                     break;
                 default:
-                    // Alapértelmezett szín (pl. piros)
+                    // piros a default
                     Array.Copy(red, colorArray, red.Length);
                     break;    
             }

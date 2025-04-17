@@ -43,7 +43,7 @@ namespace GrafikaSzeminarium
         static void Main(string[] args)
         {
             WindowOptions windowOptions = WindowOptions.Default;
-            windowOptions.Title = "Lab 3-1";
+            windowOptions.Title = "Lab 3.1";
             windowOptions.Size = new Silk.NET.Maths.Vector2D<int>(500, 500);
 
             graphicWindow = Window.Create(windowOptions);
@@ -87,8 +87,8 @@ namespace GrafikaSzeminarium
 
             Gl.ClearColor(System.Drawing.Color.White);
             
-            Gl.Enable(EnableCap.CullFace);
-            Gl.CullFace(TriangleFace.Back);
+            //Gl.Enable(EnableCap.CullFace);
+            //Gl.CullFace(TriangleFace.Back);
 
             Gl.Enable(EnableCap.DepthTest);
             Gl.DepthFunc(DepthFunction.Lequal);

@@ -55,6 +55,7 @@ namespace GrafikaSzeminarium
             uint offsetPos = 0;
             uint offsetNormals = offsetPos + 3 * sizeof(float);
             uint vertexSize = offsetNormals + 3 * sizeof(float);
+
             Gl.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, vertexSize, (void*)offsetPos);
             Gl.EnableVertexAttribArray(0);
             Gl.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, true, vertexSize, (void*)offsetNormals);
