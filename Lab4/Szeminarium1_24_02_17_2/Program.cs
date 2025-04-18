@@ -332,8 +332,12 @@ namespace Szeminarium1_24_02_17_2
         {
             // set material uniform to rubber
 
-            var modelMatrixForCenterCube = Matrix4X4.CreateScale(0.3f);
-            SetModelMatrix(modelMatrixForCenterCube);
+            var modelMatrix = Matrix4X4.CreateScale(0.15f);
+            Matrix4X4<float> rotationX = Matrix4X4.CreateRotationX((float)(Math.PI / 2f + Math.PI));
+
+            var finalModelMatrixForCar = rotationX * modelMatrix;
+
+            SetModelMatrix(finalModelMatrixForCar);
             Gl.BindVertexArray(car.Vao);
             Gl.DrawElements(GLEnum.Triangles, car.IndexArrayLength, GLEnum.UnsignedInt, null);
             Gl.BindVertexArray(0);
